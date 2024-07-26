@@ -64,6 +64,12 @@ body {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.shadow-soft {
+  -webkit-box-shadow: 0px 0px 22px 15px rgba(71, 18, 18, 0.2);
+  -moz-box-shadow: 0px 0px 22px 15px rgba(71, 18, 18, 0.2);
+  box-shadow: 0px 0px 22px 15px rgba(71, 18, 18, 0.2);
+}
+
 .sidebar-transition {
   transition: width 0.15s, transform 0.3s;
 }
@@ -93,13 +99,6 @@ body {
   justify-content: flex-start;
   height: var(--uib-size);
   width: var(--uib-size);
-}
-
-.bg-image{
-  background-color: black;
-  background-image: url("https://images.unsplash.com/photo-1645668160759-55565bd94987?q=80&w=1812&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-  background-size: cover;
-  transform: rotate(90);
 }
 
 .dot-spinner__dot {
