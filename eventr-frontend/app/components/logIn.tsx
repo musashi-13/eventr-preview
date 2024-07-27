@@ -98,7 +98,7 @@ export default function LogIn() {
 
 
     return(
-    <form onSubmit={handleLogIn} className=" relative w-96 h-[416px] p-6 flex flex-col gap-2 justify-center rounded-lg bg-zinc-950 bg-opacity-50 shadow-soft backdrop-blur-md border border-gray-500 border-opacity-10">
+    <form onSubmit={handleLogIn} className= "relative w-96 h-[416px] p-6 flex flex-col gap-2 justify-center rounded-lg bg-zinc-950 bg-opacity-50 shadow-soft backdrop-blur-md border border-gray-500 border-opacity-10">
 
         <div className="w-full relative text-2xl">
             <p>Log In</p>
