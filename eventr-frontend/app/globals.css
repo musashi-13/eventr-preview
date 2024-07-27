@@ -52,6 +52,19 @@ body {
 }
 
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: #fff !important;
+}
+
+input:-moz-autofill {
+  background-color: rgb(24, 24, 27) !important;
+  color: #fff !important;
+}
+
 .truncate-text{
   overflow: hidden;
   white-space: nowrap;
