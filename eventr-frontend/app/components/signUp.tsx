@@ -166,7 +166,7 @@ export default function SignUp() {
         </div>
         <form onSubmit={handleSignUp} className="w-96 h-[576px] p-6 flex flex-col gap-2 justify-center relative">
 
-            <div className="w-full relative text-xl">
+            <div className="w-full relative text-2xl">
                 <p>Create Account</p>
             </div>
 
