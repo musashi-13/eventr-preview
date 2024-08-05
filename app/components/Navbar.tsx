@@ -60,7 +60,7 @@ export default function NavBar({ pageId }: NavBarProps) {
                         <button className={`transform transition-transform duration-150 ${!isCollapsed ? "rotate-0" : "-rotate-180"}`} onClick={() => setIsCollapsed(!isCollapsed)}><FontAwesomeIcon icon={faCaretRight}/></button>
                     </div>
                     {userDetailsHome && (
-                        <button className={`flex items-center ${isCollapsed ? "" : "w-36"} gap-2 hover:scale-102 duration-150 border border-gray-500 border-opacity-30 rounded-lg p-1`}>
+                        <button className={`flex items-center ${isCollapsed ? "" : "w-36"} gap-2 hover:scale-102 duration-150 ${pageId === 7 ? "border-2 border-white" : "border border-gray-500"} border-opacity-30 rounded-lg p-1`}>
                             <div className="relative w-10 h-10">
                                 <Image className="object-cover rounded-full border-2 border-gray-700 border-opacity-30" src={userDetailsHome.profilePicUrl ? userDetailsHome.profilePicUrl : `https://avatar.iran.liara.run/public/${genderOutput || "boy"}`} fill alt="profile" />                
                             </div>
