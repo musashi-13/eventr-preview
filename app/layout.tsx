@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeModeScript } from "flowbite-react";
+import NavBar from "./_components/nav-bar";
+import Footer from "./_components/footer";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,9 +14,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      
+      <body className="relative bg-black circular-gradient text-white">
+        <NavBar/>
+        {children}
+        <Footer/>
+      </body>
     </html>
   );
 }

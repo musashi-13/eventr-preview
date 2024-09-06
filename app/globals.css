@@ -1,56 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+:root{
+  --uib-color: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.circular-gradient{
+  background: radial-gradient(circle at top, #1a1a1a 0%, #171717 10%, #000000 30%);
 }
 
-@keyframes colorCycle {
-  0% {
-    --uib-color: #7a7a7a;
-  }
-  25% {
-    --uib-color: #7f5f15;
-  }
-  50% {
-    --uib-color: #752d19;
-  }
-  75% {
-    --uib-color: #7f5f15;
-  }
-  100% {
-    --uib-color: #7a7a7a;
-  }
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  animation: colorCycle 10s infinite ease-in-out;
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.silver-border{
+  border: 1px solid;
+  border-image-source: linear-gradient(144.08deg, #666666 45.36%, #FFFFFF 71.05%);
 }
-
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -206,3 +181,6 @@ input:-moz-autofill {
   }
 }
 
+.custom-card-shadow{
+  box-shadow: 7px 7px 0px #e5e5e5;
+}
