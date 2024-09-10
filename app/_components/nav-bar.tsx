@@ -2,7 +2,6 @@
 import { faPlusSquare } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faCaretRight, faCircleInfo, faGear, faHome, faLifeRing, faPowerOff, faTicket, faUser, faUserAlt, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
@@ -15,8 +14,6 @@ interface UserDetails {
 
 
 export default function NavBar() {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const [userDetailsHome, setUserDetailsHome] = useState<UserDetails | null>(null);
 
@@ -36,37 +33,28 @@ export default function NavBar() {
 
         fetchEventDetailsHome();
     }, []);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-          if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-            setIsOpen(false);
-          }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, [sidebarRef]);
     
     const genderOutput = userDetailsHome?.userGender === "male" ? "boy" : "girl";
     // <Image className="object-cover rounded-full border-2 border-gray-700 border-opacity-30" src={userDetailsHome.profilePicUrl ? userDetailsHome.profilePicUrl : `https://avatar.iran.liara.run/public/${genderOutput || "boy"}`} fill alt="profile" />                
 
     return (
-        <nav className="flex items-center justify-between px-6 py-2 w-full h-16 overflow-x-hidden bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 z-40 border-b-2 border-gray-700/30">
-            <h1 className="font-gothic text-3xl tracking-widest">EVENTR</h1>
-            <div className="flex gap-4">
-                <Link className="py-2 px-3 bg-black border rounded-md border-gray-700/50 lg:hover:border-gray-500/80 duration-200" href="/"><FontAwesomeIcon icon={faPlusSquare}/>&nbsp; Event</Link>
+        <nav className="flex relative items-center justify-between px-3 md:px-6 py-2 w-full h-16 overflow-x-hidden bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 z-50 border-b-2 border-gray-700/30">
+            <div className="flex gap-3 items-center">
+                <Link href={'/home'} className="font-gothic text-3xl tracking-widest mr-8">EVENTR</Link>
+                <p className="hidden md:block opacity-60 hover:opacity-100 duration-150">Categories</p>
+                <p className="hidden md:block opacity-60 hover:opacity-100 duration-150">About Us</p>
+            </div>
+            <div className="flex gap-2 md:gap-4">
+                <Link className="py-2 active:scale-90 px-3 bg-black border rounded-md border-gray-700/50 lg:hover:border-gray-500/80 duration-200" href="/"><FontAwesomeIcon icon={faPlusSquare}/>&nbsp; Event</Link>
                 <details className="active:scale-90 h-10 w-10 flex items-center bg-black rounded-full border border-gray-700/50 lg:hover:border-gray-500/80 duration-200">
                     <summary className="relative list-none w-full flex justify-center top-1/2 -translate-y-1/2"><FontAwesomeIcon icon={faUserAlt}/></summary>
-                    <ul className="absolute text-center top-[56px] right-12 w-max p-2 rounded-md bg-black bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 border border-gray-700/30">
-                        <li className="m-1.5">My Profile</li>
-                        <li className="m-1.5">My Tickets</li>
-                        <li className="m-1.5">Saved Events</li>
-                        <li className="m-1.5">Host Dashboard</li>
-                        <li className="m-1.5">Help</li>
-                        <li className="m-1.5 h-[1px] bg-gray-500"></li>
-                        <li className="m-1.5 text-red-700"><FontAwesomeIcon icon={faPowerOff} size="sm"/>&nbsp;&nbsp;Log Out</li>
+                    <ul className="absolute text-white text-center top-[56px] right-12 w-max bg-black rounded-m  border border-gray-700/30">
+                        <li className="m-1 py-1.5 px-2 opacity-70 rounded-md hover:bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 hover:opacity-100 duration-150">My Profile</li>
+                        <li className="m-1 py-1.5 px-2 opacity-70 rounded-md hover:bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 hover:opacity-100 duration-150">My Tickets</li>
+                        <li className="m-1 py-1.5 px-2 opacity-70 rounded-md hover:bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 hover:opacity-100 duration-150">Saved Events</li>
+                        <li className="m-1 py-1.5 px-2 opacity-70 rounded-md hover:bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 hover:opacity-100 duration-150">Host Dashboard</li>
+                        <li className="m-2 h-[1px] bg-gray-500"></li>
+                        <li className="m-1 py-1 px-2 duration-150 rounded-md hover:bg-gradient-to-tr from-zinc-800/30 to-slate-800/30 text-red-700">Log Out</li>
                     </ul>
                 </details>
             </div>

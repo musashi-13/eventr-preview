@@ -4,7 +4,7 @@ import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons"
 
 export default function Footer(){
     return(
-        <footer className="mt-8 md:mt-16 bg-pure p-2 md:p-4 pt-6 relative bottom-0 left-0 w-full">
+        <footer className="mt-8 md:mt-16 bg-pure p-2 md:p-4 pt-6 relative z-40 bottom-0 left-0 w-full">
         <div className="flex flex-col gap-4 md:gap-0 sm:flex-row justify-between mx-4 md:mx-16">
             <div className="flex flex-col w-80 items-center">
             <h2 className="text-lg font-bold w-full">About Us</h2>
