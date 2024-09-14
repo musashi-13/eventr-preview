@@ -37,9 +37,9 @@ export default function Page() {
                         </div>
                     </div>
                     <div className="flex gap-2 lg:text-lg">
-                        <button className="hidden md:block bg-gray-700 bg-opacity-40 border border-gray-700 rounded-md px-4 py-1.5">Follow</button>
-                        <button className="border border-gray-700 rounded-md px-4 py-1.5">Invite</button>
-                        <button className="rounded-full h-10 w-10 bg-white text-black"><FontAwesomeIcon icon={faMessage}/></button>
+                        <button className="hidden active:scale-90 duration-200 md:block bg-gray-700 bg-opacity-40 border border-gray-700 rounded-md px-4 py-1.5">Follow</button>
+                        <button className="border active:scale-90 duration-200 border-gray-700 rounded-md px-4 py-1.5">Invite</button>
+                        <button className="rounded-full active:scale-90 duration-200 h-10 w-10 bg-white text-black"><FontAwesomeIcon icon={faMessage}/></button>
                     </div>
                 </div>
             </div>
@@ -57,9 +57,10 @@ export default function Page() {
                     <p className="text-sm">Attended</p>
                 </div>
             </div>
-            <div className="flex flex-col items-center mt-4 md:px-0 w-full lg:w-4/5 lg:px-12">
-                <h2 className="p-4 text-lg font-bold">Events Attended</h2>
-                <div className="w-max grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-4 place-items-center mx-auto">
+            <div className="flex flex-col mt-4 w-full md:w-4/5 lg:w-5/6">
+                <h2 className="py-4 px-4 lg:px-0 lg:w-4/5 text-lg font-bold">Events Attended</h2>
+                <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-5 lg:gap-4 place-items-center mx-auto">
+                    <EventCard eventId="1"/>
                     <EventCard eventId="1"/>
                     <EventCard eventId="1"/>
                     <EventCard eventId="1"/>

@@ -75,7 +75,7 @@ export default function EventCard({eventId}: EventId) {
                 <div className="relative w-full aspect-1 rounded-t-lg">
                     <Image fill priority className="rounded-md lg:rounded-b-none lg:rounded-t-lg object-cover" alt={eventDetails.eventName} src={eventDetails.eventThumbnail}/>
                 </div>
-                <div className="relative h-fit items-start w-inherit py-1 md:py-0.5 lg:p-2 bg-transparent lg:bg-gradient-to-tr from-zinc-800/50 to-slate-800/50 rounded-b-md lg:rounded-b-lg">
+                <div className="relative h-fit lg:h-24 items-start w-inherit py-1 md:py-0.5 lg:p-2 bg-transparent lg:bg-gradient-to-tr from-zinc-800/50 to-slate-800/50 rounded-b-md lg:rounded-b-lg">
                     <div className="flex gap-1 lg:gap-2">
                         <div className="relative top-0.5 lg:top-1 px-1 bg-gray-500 rounded-md bg-opacity-30">
                             <p className="text-xs font-bold relative top-1">JUL</p>

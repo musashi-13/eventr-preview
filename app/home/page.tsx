@@ -1,5 +1,6 @@
 'use client'
 import Carousel from "../_components/carousel";
+import Categories from "../_components/categories-home";
 import EventCard from "../_components/event-card";
 import SearchBar from "../_components/search-bar";
 import Trending from "../_components/trending";
@@ -13,9 +14,9 @@ export default function Page() {
                 <Carousel/>
                 <SearchBar/>
                 <Trending/>
-                <Upcoming/>        
+                <Categories/>
+                <Upcoming/>      
             </div>  
         </QueryClientProvider>
-
     )
 }
