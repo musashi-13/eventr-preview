@@ -1,10 +1,9 @@
 'use client'
 import Carousel from "../_components/carousel";
 import Categories from "../_components/categories-home";
-import EventCard from "../_components/event-card";
 import SearchBar from "../_components/search-bar";
 import Trending from "../_components/trending";
-import Upcoming from "../_components/upcoming";
+// import Upcoming from "../_components/upcoming";
 import { QueryClient, QueryClientProvider } from 'react-query';
 export default function Page() {
     const queryClient = new QueryClient();
@@ -15,7 +14,7 @@ export default function Page() {
                 <SearchBar/>
                 <Trending/>
                 <Categories/>
-                <Upcoming/>      
+                {/* <Upcoming/>   We will add this later. No need for beta*/}
             </div>  
         </QueryClientProvider>
     )

@@ -1,43 +1,61 @@
-'use client'
+'use client';
 import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-export default function Categories(){
+
+export default function Categories() {
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const handleScroll = (direction: string) => {
+    const handleScroll = (direction: "left" | "right") => {
         if (scrollRef.current) {
-        const scrollAmount = scrollRef.current.offsetWidth * 0.125;
-        (scrollRef.current as HTMLElement).scrollBy({
-            left: direction === "left" ? -scrollAmount : scrollAmount,
-            behavior: "smooth",
-        });
+            const scrollAmount = scrollRef.current.offsetWidth * 0.125;
+            scrollRef.current.scrollBy({
+                left: direction === "left" ? -scrollAmount : scrollAmount,
+                behavior: "smooth",
+            });
         }
     };
-    const items = [1, 2, 3, 4, 5, 6, 7, 8];
+
+    //Fetch this from API
+    const categories = ["Concerts", "Comedy", "Festivals", "Parties", "Conferences", "Expos", "Sports", "Arts"];
+
     return (
-      
-        <div className="w-full">
-            <div className="flex justify-between mb-2">
-                <h1>Browse Categories</h1>
+        <section className="w-full">
+            <header className="flex justify-between mb-2">
+                <h2 className="text-xl font-semibold">Browse Categories</h2>
                 <div className="text-xs lg:text-sm flex gap-1">
-                    <button className="bg-gray-900 bg-opacity-30 px-2.5 border border-gray-500/30 rounded-md hover:bg-gray-800 duration-200" onClick={() => handleScroll("left")}><FontAwesomeIcon icon={faChevronLeft}/></button>
-                    <button className="bg-gray-900 bg-opacity-30 px-2.5 border border-gray-500/30 rounded-md hover:bg-gray-800 duration-200" onClick={() => handleScroll("right")}><FontAwesomeIcon icon={faChevronRight}/></button>
+                    <button 
+                        className="bg-gray-900 bg-opacity-30 px-2.5 border border-gray-500/30 rounded-md hover:bg-gray-800 duration-200" 
+                        onClick={() => handleScroll("left")} 
+                        aria-label="Scroll left"
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+                    <button 
+                        className="bg-gray-900 bg-opacity-30 px-2.5 border border-gray-500/30 rounded-md hover:bg-gray-800 duration-200" 
+                        onClick={() => handleScroll("right")} 
+                        aria-label="Scroll right"
+                    >
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
                 </div>
-            </div>
-            <div ref={scrollRef} className="flex gap-4 hide-scrollbar overflow-x-scroll snap-x snap-mandatory scroll-smooth">
-                {items.map((item) => (
-                    <Link href={'/events/all'} key={item} className="snap-start flex-shrink-0 w-36 h-36 md:w-48 md:h-48 lg:w-64 lg:h-64 bg-eventr-gray">
-                        <div className="w-full flex">
-                            <div className="flex-grow aspect-1 bg-zinc-800"></div>
-                            <p className="w-8 text-center text-xs md:text-sm lg:text-md" style={{ writingMode: 'vertical-rl', textOrientation: 'sideways' }}>IN 2 DAYS!</p>
-                        </div>
-                        {item}  
+            </header>
+            <div 
+                ref={scrollRef} 
+                className="mt-4 flex gap-4 hide-scrollbar overflow-x-scroll snap-x snap-mandatory scroll-smooth"
+            >
+                {categories.map((category, index) => (
+                    <Link 
+                        href={`/events/${category.toLowerCase()}`} 
+                        key={index} 
+                        className="snap-start flex-shrink-0 px-8 py-5 hover:bg-eventr-gray duration-200 border border-gray-500/30 rounded-md" 
+                        title={`View all ${category} events`}
+                    >
+                        {category}
                     </Link>
                 ))}
             </div>
-      </div>
-    )
+        </section>
+    );
 }
-
