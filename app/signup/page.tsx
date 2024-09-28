@@ -30,8 +30,6 @@ export default function SignUp() {
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isPassVisible, setPassVisible] = useState<boolean>(false);
 
-    const [userSignUp, setUserSignUp] = useState<SignUpDetails | null>(null);
-
     const [inputErrMsg, setInputErrMsg] = useState<string | null>(null); 
     const [signUpErrMsg, setSignUpErrMsg] = useState<string>('')
 
