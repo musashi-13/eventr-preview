@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
-export default function Categories() {
+export default function Categories({ page }: { page: string }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const handleScroll = (direction: "left" | "right") => {
@@ -23,7 +23,7 @@ export default function Categories() {
     return (
         <section className="w-full">
             <header className="flex justify-between mb-2">
-                <h2 className="text-xl font-semibold">Browse Categories</h2>
+                <h2 className="text-xl font-semibold">{page == 'home' ? 'Browse Categories' : 'Browse Other Categories'}</h2>
                 <div className="text-xs lg:text-sm flex gap-1">
                     <button 
                         className="bg-gray-900 bg-opacity-30 px-2.5 border border-gray-500/30 rounded-md hover:bg-gray-800 duration-200" 
@@ -47,7 +47,7 @@ export default function Categories() {
             >
                 {categories.map((category, index) => (
                     <Link 
-                        href={`/events/${category.toLowerCase()}`} 
+                        href={`/events?cat=${category.toLowerCase()}`} 
                         key={index} 
                         className="snap-start flex-shrink-0 px-8 py-5 hover:bg-eventr-gray duration-200 border border-gray-500/30 rounded-md" 
                         title={`View all ${category} events`}

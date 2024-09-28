@@ -1,6 +1,6 @@
 'use client'
 import Carousel from "../_components/carousel";
-import Categories from "../_components/categories-home";
+import Categories from "../_components/categories-list";
 import SearchBar from "../_components/search-bar";
 import Trending from "../_components/trending";
 // import Upcoming from "../_components/upcoming";
@@ -13,7 +13,7 @@ export default function Page() {
                 <Carousel/>
                 <SearchBar/>
                 <Trending/>
-                <Categories/>
+                <Categories page="home"/>
                 {/* <Upcoming/>   We will add this later. No need for beta*/}
             </div>  
         </QueryClientProvider>
