@@ -168,7 +168,7 @@ export default function SignUp() {
         <form onSubmit={handleSignUp} className="-translate-y-8 bg-black rounded-r-lg w-96 h-[576px] p-6 flex flex-col gap-2 justify-center relative">
 
             <div className="w-full relative text-2xl">
-                <p>Become a Host</p>
+                <p>Create Account</p>
             </div>
 
             <div className="relative h-2 mb-0.5">
