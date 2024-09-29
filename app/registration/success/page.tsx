@@ -1,8 +1,7 @@
-
 export default function Page() {
     return (
         <div>
-            This is preview repository
+            Thank you for registering!
         </div>
-    );
+    )
 }
