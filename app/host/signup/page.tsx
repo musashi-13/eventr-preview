@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleNotch, faCalendar, faEye, faEyeSlash, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { format } from "date-fns";
-
+import { useRouter } from "next/navigation";
 interface FormData{
     userName: string;
     userMail: string;
@@ -49,7 +49,7 @@ export default function SignUp() {
     const [signUpErrMsg, setSignUpErrMsg] = useState<string>('')
 
     const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
-
+    const router = useRouter();
     const userNameRef = useRef<HTMLInputElement>(null);
     const termsRef = useRef<HTMLInputElement>(null);
     const datePickerRef = useRef<HTMLDivElement>(null);
@@ -192,7 +192,8 @@ export default function SignUp() {
             json: formData,
           }).json();
           // Code after signup successful
-        
+          router.push("/regisration/success");
+
         //API failures
         } catch (error) {
           if (error instanceof HTTPError) {

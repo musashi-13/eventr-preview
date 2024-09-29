@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
 import ky, { HTTPError, TimeoutError } from 'ky';
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleNotch, faEye, faEyeSlash, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import DatePicker from "react-datepicker";
 
 interface SignUpDetails{
     userName: string;
@@ -20,7 +20,7 @@ interface CheckUsernameResponse {
 
 
 export default function SignUp() {
-    
+    const router = useRouter();
     const [userName, setUserName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -124,7 +124,7 @@ export default function SignUp() {
             json: userSignUp,
           }).json();
           // Code after signup successful
-
+          router.push("/regisration/success");
         //API failures
         } catch (error) {
           if (error instanceof HTTPError) {
