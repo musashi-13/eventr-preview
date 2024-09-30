@@ -58,64 +58,64 @@ export default function Home() {
       <div id='team-section' className='relative mt-12'>
         <h2 className='text-3xl mb-8'>Our Team</h2>
         <div className='flex gap-4 gap-y-6 items-center justify-center md:gap-8 lg:gap-12 w-full flex-wrap'>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/1.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Tanishq Praveen</h3>
             <p>CEO & Founder</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/2.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Hiten bothra</h3>
             <p>CMO</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/7.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Karan Hathwar</h3>
             <p>CTO</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/3.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Ritesh K</h3>
             <p>Back End Lead</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/6.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Shrish</h3>
             <p>Developer</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/5.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Nagnathan</h3>
             <p>Developer</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/4.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Pranaya</h3>
             <p>Marketing Head</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/8.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Shivain Varma</h3>
             <p>Marketing Team</p>
           </div>
-          <div className='flex flex-col w-32 md:w-48 items-center gap-1'>
-            <div className='relative h-32 md:h-48 aspect-1 object-cover'>
+          <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
+            <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/9.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
             <h3 className='text-md md:text-xl'>Mrittika</h3>
