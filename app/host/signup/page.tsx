@@ -1,12 +1,15 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
 import ky, { HTTPError, TimeoutError } from 'ky';
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleNotch, faCalendar, faEye, faEyeSlash, faWarning } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
+import { API_ENDPOINTS } from "@/server/constraints";
+
 interface FormData{
     userName: string;
     userMail: string;
@@ -69,6 +72,7 @@ export default function SignUp() {
             setIsAvailable(response.available)
         }
         catch (error) {
+            console.error("Error checking username availability", error);
             setIsAvailable(false);
         }
     }
@@ -92,6 +96,22 @@ export default function SignUp() {
         };
     }, [formData.userName]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+                setIsDatePickerOpen(false);
+            }
+        };
+        if (isDatePickerOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isDatePickerOpen]);
+
     const checkPasswordStrength = (password: string): number => {
         let conditionsMet = 0;
         if (/[A-Z]/.test(password)) conditionsMet++;
@@ -102,15 +122,16 @@ export default function SignUp() {
     };
 
     const handleDateChange = (field: 'year' | 'month' | 'day', value: number) => {
-        setTempDate(prev => ({ ...prev, [field]: value }))
-        
-        if (tempDate.year !== null && tempDate.month !== null && field === 'day') {
-          const newDate = new Date(tempDate.year, tempDate.month, value)
-          setFormData(prevData => ({ ...prevData, dob: newDate }))
-          setIsDatePickerOpen(false)
-          setTempDate({ year: null, month: null, day: null })
+        const updatedTempDate = { ...tempDate, [field]: value };
+        setTempDate(updatedTempDate);
+    
+        if (updatedTempDate.year !== null && updatedTempDate.month !== null && field === 'day') {
+            const newDate = new Date(updatedTempDate.year, updatedTempDate.month, value);
+            setFormData(prevData => ({ ...prevData, dob: newDate }));
+            setIsDatePickerOpen(false);
+            setTempDate({ year: null, month: null, day: null });
         }
-      }
+    };
 
     const renderDatePicker = () => {
         const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i)
@@ -166,16 +187,16 @@ export default function SignUp() {
     
         //Conditions to check if inputs are correct
         const conditions = [
-          { condition: Object.values(formData).some(value => value === "" || value === null || value === undefined) || confirmPassword === "", message: "Please fill all the fields." },
-          { condition: formData.userName.length < 3, message: "Username must be at least 3 characters long." },
-          { condition: !/^[a-zA-Z0-9_.]+$/.test(formData.userName), message: "Username can only have letters, numbers . and _." },
-          { condition: isAvailable === false, message: "Username is already taken." },
-          { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.userMail), message: "Email is not in the correct format." },
-          { condition: checkPasswordStrength(formData.passWord) < 4, message: "Password must contain A-Z, a-z and 0-9." },
-          { condition: formData.passWord.length < 8, message: "Password must be at least 8 characters long." },
-          { condition: formData.passWord !== confirmPassword, message: "Passwords do not match." },
-          { condition: !termsRef.current?.checked, message: "Please agree to the terms and conditions." },
-          { condition: !/^[2-9](\d{4}\s?){2}\d{3}$/.test(formData.aadhaarId), message: "Aadhaar number is not in the correct format." },
+            { condition: Object.entries(formData).some(([key, value]) => (key !== 'companyEmail') && (value === "" || value === null || value === undefined)) || confirmPassword === "", message: "Please fill all the fields." },
+            { condition: formData.userName.length < 3, message: "Username must be at least 3 characters long." },
+            { condition: !/^[a-zA-Z0-9_.]+$/.test(formData.userName), message: "Username can only have letters, numbers . and _." },
+            { condition: isAvailable === false, message: "Username is already taken." },
+            { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.userMail), message: "Email is not in the correct format." },
+            { condition: checkPasswordStrength(formData.passWord) < 4, message: "Password must contain A-Z, a-z and 0-9." },
+            { condition: formData.passWord.length < 8, message: "Password must be at least 8 characters long." },
+            { condition: formData.passWord !== confirmPassword, message: "Passwords do not match." },
+            { condition: !termsRef.current?.checked, message: "Please agree to the terms and conditions." },
+            { condition: !/^[2-9](\d{4}\s?){2}\d{3}$/.test(formData.aadhaarId), message: "Aadhaar number is not in the correct format." },
         ];
     
         for (const { condition, message } of conditions) {
@@ -184,15 +205,14 @@ export default function SignUp() {
             return;
           }
         }
-        //add signup
         setIsSigningUp(true);
 
         try {
-          const response = await ky.post("SIGNIN_API_ENDPOINT", {
+          const response = await ky.post(API_ENDPOINTS.HOST_SIGNUP, {
             json: formData,
           }).json();
           // Code after signup successful
-          router.push("/regisration/success");
+          router.push("/registration/success");
 
         //API failures
         } catch (error) {
@@ -228,9 +248,9 @@ export default function SignUp() {
     return(
     <div className="relative flex h-full my-16 items-center justify-center rounded-lg">
 
-        <form onSubmit={handleSignUp} className="-translate-y-8 bg-black rounded-r-lg w-96 h-max p-6 flex flex-col gap-2 justify-center relative">
+        <form onSubmit={handleSignUp} className="-translate-y-8 bg-black border-2 border-zinc-500/20 rounded-lg w-96 h-max p-6 flex flex-col gap-2 justify-center relative">
 
-            <div className="w-full relative text-2xl">
+            <div className="w-full relative text-3xl">
                 <p>Join as a Host</p>
             </div>
 

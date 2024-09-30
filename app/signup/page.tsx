@@ -6,6 +6,7 @@ import {faCircleNotch, faEye, faEyeSlash, faWarning } from "@fortawesome/free-so
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { API_ENDPOINTS } from "@/server/constraints";
 
 interface SignUpDetails{
     userName: string;
@@ -48,7 +49,7 @@ export default function SignUp() {
     //API to check if username available
     const checkUserName = async (userName: string) => {
         try {
-            const response = await ky.post('CHECK_USERNAME_API_ENDPOINT',
+            const response = await ky.post(API_ENDPOINTS.USERNAME_CHECK,
                 {json: userName}).json<CheckUsernameResponse>();
             setIsAvailable(response.available)
         }
@@ -120,7 +121,7 @@ export default function SignUp() {
         setIsSigningUp(true);
 
         try {
-          const response = await ky.post("SIGNIN_API_ENDPOINT", {
+          const response = await ky.post(API_ENDPOINTS.USER_SIGNUP, {
             json: userSignUp,
           }).json();
           // Code after signup successful
@@ -157,15 +158,9 @@ export default function SignUp() {
 
 
     return(
-    <div className="relative flex h-screen items-center justify-center rounded-lg bg-zinc-950 bg-opacity-50 shadow-soft backdrop-blur-md border border-gray-500 border-opacity-10">
-        {/* <div className="relative rounded-l-lg -translate-y-8 w-96 h-[576px] p-2 flex items-center justify-center">
-            <Image fill className="object-cover rounded-l-lg brightness-50" src="https://images.unsplash.com/photo-1549194400-06e6874c2fd1?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="SignUp"/>
-            <div className="relative w-72 h-96 rounded-lg bg-zinc-950 bg-opacity-75 backdrop-blur-sm">
-            </div>
-        </div> */}
-        <form onSubmit={handleSignUp} className="-translate-y-8 bg-black rounded-r-lg w-96 h-[576px] p-6 flex flex-col gap-2 justify-center relative">
-
-            <div className="w-full relative text-2xl">
+    <div className="relative flex h-full my-16 items-center justify-center rounded-lg">
+        <form onSubmit={handleSignUp} className="-translate-y-8 bg-black border-2 border-zinc-500/20 rounded-lg w-96 h-[540px] p-6 flex flex-col gap-2 justify-center relative">
+            <div className="w-full relative text-3xl">
                 <p>Create Account</p>
             </div>
 
@@ -175,7 +170,7 @@ export default function SignUp() {
             </div>
 
             <div className="relative">
-                <label htmlFor="userName" className="text-sm text-zinc-500">Username</label>
+                <label htmlFor="userName" className="text-sm text-zinc-400">Username</label>
                 <input
                     ref={userNameRef}
                     value={userName}
@@ -188,7 +183,7 @@ export default function SignUp() {
             </div>
 
             <div className="relative">
-                <label htmlFor="email" className="text-sm text-zinc-500">Email</label>
+                <label htmlFor="email" className="text-sm text-zinc-400">Email</label>
                 <input 
                     value={email}
                     id="email"
@@ -198,14 +193,14 @@ export default function SignUp() {
             </div>
 
             <div className="relative">
-                <label htmlFor="password" className="text-sm text-zinc-500">Password</label>
+                <label htmlFor="password" className="text-sm text-zinc-400">Password</label>
                 <input type={isPassVisible ? "text" : "password"} 
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full p-1 rounded-lg font-mono bg-zinc-900 border border-gray-500 border-opacity-10 outline-none hover:ring-1 focus:ring-1 ring-gray-900"/>
                 
-                <button type="button" onClick={() => setPassVisible(!isPassVisible)} className="bg-zinc-900 absolute right-2 top-7 text-zinc-500" >{isPassVisible ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/> }</button>   
+                <button type="button" onClick={() => setPassVisible(!isPassVisible)} className="bg-zinc-900 absolute right-2 top-7 text-zinc-400" >{isPassVisible ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/> }</button>   
                 
                 <div className="flex gap-1 w-full  my-1">
                     <div className={`${checkPasswordStrength(password) >= 1 ? "bg-green-800" : "bg-zinc-800"} h-1 flex-1 rounded-full`}></div>
@@ -216,15 +211,15 @@ export default function SignUp() {
             </div>
 
             <div className="relative">
-                <label htmlFor="confirmpassword" className="text-sm text-zinc-500">Confirm Password</label>
+                <label htmlFor="confirmpassword" className="text-sm text-zinc-400">Confirm Password</label>
                 <input type={isPassVisible ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full p-1 rounded-lg font-mono bg-zinc-900 border border-gray-500 border-opacity-10 outline-none hover:ring-1 focus:ring-1 ring-gray-900"/>
-                <button type="button" onClick={() => setPassVisible(!isPassVisible)} className="bg-zinc-900 absolute right-2 top-7 text-zinc-500" >{isPassVisible ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/> }</button>   
+                <button type="button" onClick={() => setPassVisible(!isPassVisible)} className="bg-zinc-900 absolute right-2 top-7 text-zinc-400" >{isPassVisible ? <FontAwesomeIcon icon={faEyeSlash}/> : <FontAwesomeIcon icon={faEye}/> }</button>   
             </div>
 
-            <div className="flex gap-1 text-xs text-zinc-500">
+            <div className="flex gap-1 text-xs text-zinc-400">
                 <input ref={termsRef} type="checkbox" className="opacity-75"/>
                 <p>I agree to the <button type="button" className="underline">Terms and Conditions</button></p>
             </div>
@@ -236,7 +231,7 @@ export default function SignUp() {
                     disabled={isSigningUp}>
                 {isSigningUp ? <p><FontAwesomeIcon icon={faCircleNotch} spin /></p> : <p>Create Account</p>}</button>
 
-                <p className="text-xs text-zinc-500 my-1">or</p>
+                <p className="text-xs text-zinc-400 my-1">or</p>
 
                 <button type="button" className="w-full flex items-center justify-center gap-2 text-zinc-300 p-2 rounded-lg bg-zinc-900 border border-gray-500 border-opacity-10 hover:ring-1 focus:ring-1 ring-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
@@ -248,7 +243,7 @@ export default function SignUp() {
             </div>
 
             {/* <div className="mt-2">
-                <p className="w-full text-right text-sm text-zinc-500">Already have an account? <Link href='/login' className="text-zinc-300 underline">Login</Link></p>
+                <p className="w-full text-right text-sm text-zinc-400">Already have an account? <Link href='/login' className="text-zinc-300 underline">Login</Link></p>
             </div> */}
         </form>
     </div>
