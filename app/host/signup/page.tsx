@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import { API_ENDPOINTS } from "@/server/constraints";
+import { API_ENDPOINTS } from "@/server/endpoints";
 
 interface FormData{
     userName: string;
@@ -188,7 +188,7 @@ export default function SignUp() {
         //Conditions to check if inputs are correct
         const conditions = [
             { condition: Object.entries(formData).some(([key, value]) => (key !== 'companyEmail') && (value === "" || value === null || value === undefined)) || confirmPassword === "", message: "Please fill all the fields." },
-            { condition: formData.userName.length < 3, message: "Username must be at least 3 characters long." },
+            { condition: formData.userName.length < 5 || formData.userName.length > 32, message: "Username must be at least 3 characters long." },
             { condition: !/^[a-zA-Z0-9_.]+$/.test(formData.userName), message: "Username can only have letters, numbers . and _." },
             { condition: isAvailable === false, message: "Username is already taken." },
             { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.userMail), message: "Email is not in the correct format." },
@@ -212,7 +212,8 @@ export default function SignUp() {
             json: formData,
           }).json();
           // Code after signup successful
-          router.push("/registration/success");
+          localStorage.setItem('signupusername', formData.userName);
+          router.push("/registration/otp?verify=host");
 
         //API failures
         } catch (error) {

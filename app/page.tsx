@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRef, useEffect } from 'react';
 config.autoAddCss = false
 
@@ -44,10 +45,10 @@ export default function Home() {
         <h1 className='text-4xl md:text-5xl lg:text-8xl w-4/5 md:w-2/3 lg:w-2/3'>
           Your Trusted Ticketing Partner
         </h1>
-        <button className='px-6 w-max py-3 text-lg font-bold text-black rounded-full bg-white border border-gray-600'>Become a Host <FontAwesomeIcon icon={faUpRightFromSquare}/></button>
+        <Link href={'/signup?host=true'} className='px-6 w-max py-3 text-lg font-bold text-black rounded-full bg-white border border-gray-600'>Become a Host <FontAwesomeIcon icon={faUpRightFromSquare}/></Link>
       </div>
       <div id='description-section' className='mt-16'>
-        <p ref={descriptionRef} className='relative text-ani left-1/2 -translate-x-1/2 text-lg md:text-2xl lg:text-3xl leading-relaxed w-4/5 text-center'>
+        <p ref={descriptionRef} className='relative text-ani left-1/2 -translate-x-1/2 text-lg md:text-2xl lg:text-3xl leading-8 w-4/5 text-center'>
         Welcome to Eventr, where every ticket tells a story! We're an innovative online ticketing platform that combines the excitement 
         of social media with seamless ticket purchasing. Discover and buy passes to incredible events and parties while connecting with 
         fellow attendees—all in one place! For hosts, listing your event is as quick as making instant noodles, and you'll gain access 
@@ -69,7 +70,7 @@ export default function Home() {
             <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/2.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
-            <h3 className='text-md md:text-xl'>Hiten bothra</h3>
+            <h3 className='text-md md:text-xl'>Hiten Bothra</h3>
             <p>CMO</p>
           </div>
           <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>

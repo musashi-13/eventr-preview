@@ -40,7 +40,7 @@ export default function NavBar() {
                 <Link href={'/'} className="font-gothic text-3xl tracking-widest mr-2">EVENTR</Link>
                 {/* <Link href={'/home'} className="font-gothic text-3xl tracking-widest mr-2">EVENTR</Link> */}
                 {/* Only temporary and eventr logo should redirect to /home as shown above*/}
-                {pathname === "/" || pathname ==="/host/signup" || pathname === "/signup" ?
+                {pathname === "/" || pathname === "/signup" ?
                 <Link href="/#team-section" className="hidden font-bold md:block opacity-75 hover:opacity-100 duration-150">Our Team</Link> :
                 <Link href={'/events?cat=all'} className="hidden font-bold md:block opacity-75 hover:opacity-100 duration-150">Categories</Link>
                 }
@@ -48,7 +48,7 @@ export default function NavBar() {
             </div>
             <div className="flex gap-2 md:gap-4">
             <Link className="py-1.5 active:scale-90 font-bold px-3 bg-black border rounded-md border-gray-700/50 lg:hover:border-gray-500/80 duration-200" href="/signup">Sign Up</Link>
-            <Link className="py-1.5 active:scale-90 font-bold px-3 bg-white text-black border rounded-md border-gray-700/50 lg:hover:border-gray-500/80 duration-200" href="/host/signup">Become a Host</Link>
+            <Link className="py-1.5 active:scale-90 font-bold px-3 bg-white text-black border rounded-md border-gray-700/50 lg:hover:border-gray-500/80 duration-200" href='/signup?host=true'>Become a Host</Link>
             </div>
         </nav>  
     );

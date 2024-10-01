@@ -6,12 +6,24 @@ import {faCircleNotch, faEye, faEyeSlash, faWarning } from "@fortawesome/free-so
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { API_ENDPOINTS } from "@/server/constraints";
+import { API_ENDPOINTS } from "@/server/endpoints";
+import { useSearchParams } from "next/navigation";
+import secureLocalStorage from "react-secure-storage";
 
-interface SignUpDetails{
-    userName: string;
-    userMail: string;
-    passWord: string;
+interface SignUpResponse {
+    email: string;
+    expiryAt: string;
+    message: string;
+    tempToken: string;
+    username: string;
+}
+interface SignUpForm{
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    email: string;
+    username: string;
+    password: string;
 }
 
 interface CheckUsernameResponse {
@@ -21,7 +33,10 @@ interface CheckUsernameResponse {
 
 
 export default function SignUp() {
+
     const router = useRouter();
+    const params = useSearchParams();
+    const host = params.get('host');
     const [userName, setUserName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -49,11 +64,16 @@ export default function SignUp() {
     //API to check if username available
     const checkUserName = async (userName: string) => {
         try {
-            const response = await ky.post(API_ENDPOINTS.USERNAME_CHECK,
-                {json: userName}).json<CheckUsernameResponse>();
+            const response = await ky.post(API_ENDPOINTS.USERNAME_CHECK,{
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                json: {username: userName}
+            }).json<CheckUsernameResponse>();
             setIsAvailable(response.available)
         }
         catch (error) {
+            setSignUpErrMsg("We are currently facing issues. Please try later.");
             setIsAvailable(false);
         }
     }
@@ -94,12 +114,12 @@ export default function SignUp() {
         //Conditions to check if inputs are correct
         const conditions = [
           { condition: userName === "" || email === "" || password === "" || confirmPassword === "", message: "Please fill all the fields." },
-          { condition: userName.length < 3, message: "Username must be at least 3 characters long." },
+          { condition: userName.length < 5 || userName.length > 32, message: "Username must be 5-25 characters long." },
           { condition: !/^[a-zA-Z0-9_.]+$/.test(userName), message: "Username can only have letters, numbers . and _." },
           { condition: isAvailable === false, message: "Username is already taken." },
           { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), message: "Email is not in the correct format." },
           { condition: checkPasswordStrength(password) < 4, message: "Password must contain A-Z, a-z and 0-9." },
-          { condition: password.length < 8, message: "Password must be at least 8 characters long." },
+          { condition: password.length < 8 && password.length > 30, message: "Password must be between 8 and 30 characters long." },
           { condition: password !== confirmPassword, message: "Passwords do not match." },
           { condition: !termsRef.current?.checked, message: "Please agree to the terms and conditions." },
         ];
@@ -112,22 +132,37 @@ export default function SignUp() {
         }
     
         //Create SigUpDetails onbject
-        const userSignUp: SignUpDetails = {
-          userName: userName,
-          userMail: email,
-          passWord: password,
+        const userSignUp: SignUpForm = {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            username: userName,
+            email: email,
+            password: password,
         };
     
         setIsSigningUp(true);
 
         try {
-          const response = await ky.post(API_ENDPOINTS.USER_SIGNUP, {
-            json: userSignUp,
-          }).json();
+          const response = await ky.post(API_ENDPOINTS.USER_SIGNUP,{
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            json: userSignUp
+        }).json<SignUpResponse>();
+          console.log(response)
           // Code after signup successful
-          router.push("/regisration/success");
+          secureLocalStorage.setItem('accessKey', response.tempToken);          
+          secureLocalStorage.setItem('email', response.email);
+          secureLocalStorage.setItem('username', response.username);
+          if (host) {
+            router.push("/register/otp?verify=user&host=true");
+          } else {
+          router.push("/register/otp?verify=user");
+          }
         //API failures
         } catch (error) {
+            console.log(error)
           if (error instanceof HTTPError) {
             if (error.response.status === 500) {
               setSignUpErrMsg("Server error. Please try again later.");
@@ -154,8 +189,8 @@ export default function SignUp() {
         } finally {
           setIsSigningUp(false);
         }
-      };
-
+    };
+    
 
     return(
     <div className="relative flex h-full my-16 items-center justify-center rounded-lg">
