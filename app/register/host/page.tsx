@@ -60,7 +60,7 @@ export default function SignUp() {
 
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
                 setIsDatePickerOpen(false);
             }

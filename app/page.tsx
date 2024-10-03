@@ -10,35 +10,6 @@ config.autoAddCss = false
 
 
 export default function Home() {
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          descriptionRef.current?.classList.add('text-white');
-          descriptionRef.current?.classList.remove('text-gray-400');
-        } else {
-          descriptionRef.current?.classList.add('text-gray-400');
-          descriptionRef.current?.classList.remove('text-white');
-        }
-      },
-      {
-        threshold: 0.1, // Adjust this value as needed
-      }
-    );
-
-    if (descriptionRef.current) {
-      observer.observe(descriptionRef.current);
-    }
-
-    return () => {
-      if (descriptionRef.current) {
-        observer.unobserve(descriptionRef.current);
-      }
-    };
-  }, []);
-
   return (
     <main className='relative px-4 md:px-8 lg:px-16 h-full'>
       <div id='hero-section' className='relative flex flex-col justify-center h-60 md:h-72 lg:h-[480px] gap-6 md:gap-8 lg:gap-12'>
@@ -46,9 +17,11 @@ export default function Home() {
           Your Trusted Ticketing Partner
         </h1>
         <Link href={'/signup?host=true'} className='px-6 w-max py-3 text-lg font-bold text-black rounded-full bg-white border border-gray-600'>Become a Host <FontAwesomeIcon icon={faUpRightFromSquare}/></Link>
+        <h2 className='text-xl md:text-3xl lg:text-4xl'>We are coming soon!</h2>
+
       </div>
       <div id='description-section' className='mt-16'>
-        <p ref={descriptionRef} className='relative text-ani left-1/2 -translate-x-1/2 text-lg md:text-2xl lg:text-3xl leading-8 w-4/5 text-center'>
+        <p className='relative text-ani left-1/2 -translate-x-1/2 text-lg md:text-2xl lg:text-3xl leading-8 w-4/5 text-center'>
         Welcome to Eventr, where every ticket tells a story! We're an innovative online ticketing platform that combines the excitement 
         of social media with seamless ticket purchasing. Discover and buy passes to incredible events and parties while connecting with 
         fellow attendees—all in one place! For hosts, listing your event is as quick as making instant noodles, and you'll gain access 
@@ -84,8 +57,8 @@ export default function Home() {
             <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/3.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
-            <h3 className='text-md md:text-xl'>Ritesh K</h3>
-            <p>Back End Lead</p>
+            <h3 className='text-md md:text-xl'>Ritesh Koushik</h3>
+            <p>Backend Engineer</p>
           </div>
           <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>
             <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
