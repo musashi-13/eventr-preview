@@ -8,19 +8,7 @@ import { API_ENDPOINTS } from "@/server/endpoints";
 import { useSearchParams } from "next/navigation";
 import secureLocalStorage from "react-secure-storage";
 
-interface PermanentToken {
-        token: string,
-        message: string,
-        username: string,
-        email: string,
-        firstName: string,
-        middleName: string,
-        lastName: string,
-        profilePictureURL: string,
-        phoneNumber: string
-        city: string,
-        accountStatus: string,
-}
+
 
 export default function OtpVerify() {
     //codeFor: 
@@ -40,7 +28,7 @@ export default function OtpVerify() {
     useEffect(() => {
         // Retrieve username from local storage
 
-        const storedEmail = secureLocalStorage.getItem('email');
+        const storedEmail = secureLocalStorage.getItem('hostEmail');
         const storedUsername = secureLocalStorage.getItem('username');
 
         if (storedEmail && storedUsername) {
@@ -110,7 +98,7 @@ export default function OtpVerify() {
 
     const handleResend = async () => {
         try {
-            const response = await ky.post(API_ENDPOINTS.USER_OTP_RESEND, {
+            const response = await ky.post(API_ENDPOINTS.HOST_OTP_RESEND, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${secureLocalStorage.getItem('accessKey')}`
@@ -135,21 +123,14 @@ export default function OtpVerify() {
         }
         setIsVerifying(true);
         try {
-            const response = await ky.post(API_ENDPOINTS.USER_OTP_VERIFY, {
+            const response = await ky.post(API_ENDPOINTS.HOST_OTP_VERIFY, {
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${secureLocalStorage.getItem('accessKey')}`
                 },
-                json: { username: username, email: email, otp: otp }
-            }).json<PermanentToken>();
-            secureLocalStorage.removeItem('accessKey');
-            secureLocalStorage.setItem('accessKey', response.token);
-            secureLocalStorage.setItem('username', response.username);
-            if (host){
-                router.push(`/register/host`);
-            } else {
-                router.push('/register/success')
-            }
+                json: { username: username, companyMail: email, otp: otp }
+            }).json();
+            router.push(`/register/success?host=true`);
         } 
         catch (error) {
             console.log(error)
@@ -181,7 +162,7 @@ export default function OtpVerify() {
         <div className="flex h-screen w-full items-center justify-center">
         <div className= "relative w-96 h-76 p-6 -translate-y-16 flex flex-col justify-center rounded-lg bg-black bg-opacity-50 border-2 border-zinc-500/20 border-opacity-10">
             <div className="w-full relative text-2xl">
-                <p>Verify your Email</p>
+                <p>Verify to become a Host</p>
             </div>
             <div className="text-sm text-gray-500 mt-1">
                 <p>Enter the code sent to {email}.</p>

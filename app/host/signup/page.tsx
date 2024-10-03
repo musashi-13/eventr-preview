@@ -188,6 +188,7 @@ export default function SignUp() {
         //Conditions to check if inputs are correct
         const conditions = [
             { condition: Object.entries(formData).some(([key, value]) => (key !== 'companyEmail') && (value === "" || value === null || value === undefined)) || confirmPassword === "", message: "Please fill all the fields." },
+            { condition: Object.entries(formData).some(([_, value]) => /;/.test(value)), message: "Your input contains semicolons." },
             { condition: formData.userName.length < 5 || formData.userName.length > 32, message: "Username must be at least 3 characters long." },
             { condition: !/^[a-zA-Z0-9_.]+$/.test(formData.userName), message: "Username can only have letters, numbers . and _." },
             { condition: isAvailable === false, message: "Username is already taken." },
@@ -196,7 +197,6 @@ export default function SignUp() {
             { condition: formData.passWord.length < 8, message: "Password must be at least 8 characters long." },
             { condition: formData.passWord !== confirmPassword, message: "Passwords do not match." },
             { condition: !termsRef.current?.checked, message: "Please agree to the terms and conditions." },
-            { condition: !/^[2-9](\d{4}\s?){2}\d{3}$/.test(formData.aadhaarId), message: "Aadhaar number is not in the correct format." },
         ];
     
         for (const { condition, message } of conditions) {

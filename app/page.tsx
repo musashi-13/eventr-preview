@@ -71,7 +71,7 @@ export default function Home() {
             <div className='relative h-32 md:h-40 lg:w-48 aspect-1 object-cover'>
               <Image src='/5.jpg' className='rounded-full' fill alt='Tanishq'/>
             </div>
-            <h3 className='text-md md:text-xl'>Nagnathan</h3>
+            <h3 className='text-md md:text-xl'>Naganathan</h3>
             <p>Developer</p>
           </div>
           <div className='flex flex-col w-32 md:w-40 lg:w-48 items-center gap-1'>

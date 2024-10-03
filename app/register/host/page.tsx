@@ -13,29 +13,33 @@ interface HostData{
     username: string;
     dob: Date | null;
     firstName: string;
-    middleName: string,
+    middleName?: string,
     lastName: string;
     phoneNumber: string;
     companyName: string;
-    isCompanyRegistered: boolean;
-    companyEmail?: string;
+    registered: boolean;
+    companyMail: string;
     hostedStatus: string;
 }
 
+interface ResponseData {
+    email: string;
+    expiryAt: string;
+    message: string;
+    username: string;
+}
 
 export default function SignUp() {
-
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
     const [formData, setFormData] = useState<HostData>({
-        username: (secureLocalStorage.getItem('username') as string) || "",
+        username: (secureLocalStorage.getItem('username') as string),
         firstName: "",
-        middleName: "",
         lastName: "",
         phoneNumber: "",
         dob: null,
         companyName: "",
-        isCompanyRegistered: false,
-        companyEmail: "",
+        registered: false,
+        companyMail: "",
         hostedStatus: "UnderFive",
     });
     const [tempDate, setTempDate] = useState<{ year: number | null, month: number | null, day: number | null }>({
@@ -57,7 +61,6 @@ export default function SignUp() {
             nameRef.current.focus();
         }
     }, []);
-
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent): void => {
@@ -134,48 +137,63 @@ export default function SignUp() {
           </div>
         )
     }
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setInputErrMsg(null);
         setSignUpErrMsg("");
-    
+            
         //Conditions to check if inputs are correct
         const conditions = [
             { condition: !fullName || !formData.phoneNumber || !formData.companyName, message: "Fill all the fields."},
             { condition: !/^[6-9]\d{9}$/.test(formData.phoneNumber), message: "Check your phone number." },
             { condition: fullName.trim().split(/\s+/).length > 3, message: "First, Middle and Last Name only" },
-            // { condition: !/^[a-zA-Z]+$/.test(fullName), message: "Full name should have alphabets only."},
+            { condition: !/^[a-zA-Z\s]+$/.test(fullName), message: "Full name should have alphabets and spaces only."},
+            { condition: formData.dob === null, message: "Select your Date of Birth." },
+            { condition: formData.companyMail && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.companyMail), message: "Company email is in the wrong format." },
+            { condition: formData.companyName.length > 60 , message: "Company name should be under 60 characters." },
+            { condition: /;/.test(fullName) || /;/.test(formData.phoneNumber) || /;/.test(formData.companyName) || /;/.test(formData.companyMail), message: "Inputs should not contain special charaters." }
+
         ];
-    
         for (const { condition, message } of conditions) {
-          if (condition) {
-            setInputErrMsg(message);
-            return;
-          }
+            if (condition) {
+              setInputErrMsg(message);
+              return;
+            }
         }
+
         const nameParts = fullName.trim().split(/\s+/);
-        setFormData(prevData => ({
-            ...prevData,
-            firstName: nameParts[0],
-            middleName: nameParts.length === 3 ? nameParts[1] : "",
-            lastName: nameParts.length > 1 ? nameParts[nameParts.length - 1] : ""
-        }));
+        let updatedFormData = { ...formData };
+
+        if (nameParts.length === 3) {
+            updatedFormData.firstName = nameParts[0];
+            updatedFormData.middleName = nameParts[1];
+            updatedFormData.lastName = nameParts[2];
+        } else if (nameParts.length === 2) {
+            updatedFormData.firstName = nameParts[0];
+            updatedFormData.lastName = nameParts[1];
+        } else {
+            setInputErrMsg("Full name should have First, Middle, and Last Name only.");
+            return;
+        }
 
         setIsSigningUp(true);
-        console.log(formData);
+        console.log(updatedFormData);
+
         try {
           const response = await ky.post(API_ENDPOINTS.HOST_SIGNUP,
             { 
             headers: { 
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${secureLocalStorage.getItem('token')}` },
+                'Authorization': `Bearer ${secureLocalStorage.getItem('accessKey')}` },
             
-            json: formData,
-          }).json();
+            json: updatedFormData
+          }).json<ResponseData>();
+          
           // Code after signup successful
           //   localStorage.setItem('signupusername', formData.userName);
-          router.push("/register/success");
-          secureLocalStorage.removeItem('accessKey');
+          router.push("/host/otp");
+          secureLocalStorage.setItem('hostEmail', response.email);
         //API failures
         } catch (error) {
           if (error instanceof HTTPError) {
@@ -228,7 +246,7 @@ export default function SignUp() {
                     ref = {nameRef}
                     type="text"
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={e  => setFullName(e.target.value)}
                     className="w-full p-1 rounded-lg bg-zinc-900 border border-gray-500 border-opacity-10 outline-none hover:ring-1 focus:ring-1 ring-gray-900"
                 />
             </div>
@@ -277,7 +295,7 @@ export default function SignUp() {
                     id="isCompanyRegistered"
                     name="isCompanyRegistered"
                     type="checkbox"
-                    onChange={(e) => setFormData(prevData => ({ ...prevData, isCompanyRegistered: e.target.checked }))}
+                    onChange={(e) => setFormData(prevData => ({ ...prevData, registered: e.target.checked }))}
                 />
                 <label htmlFor="isCompanyRegistered" className="text-xs text-zinc-400">
                     Is company registered?
@@ -290,8 +308,8 @@ export default function SignUp() {
                     id="companyEmail"
                     name="companyEmail"
                     type="email"
-                    value={formData.companyEmail}
-                    onChange={(e) => setFormData(prevData => ({ ...prevData, companyEmail: e.target.value }))}
+                    value={formData.companyMail}
+                    onChange={(e) => setFormData(prevData => ({ ...prevData, companyMail: e.target.value }))}
                     className="w-full p-1 rounded-lg bg-zinc-900 border border-gray-500 border-opacity-10 outline-none hover:ring-1 focus:ring-1 ring-gray-900"
                 />
             </div>
@@ -301,7 +319,7 @@ export default function SignUp() {
                     id="eventsHosted"
                     name="eventsHosted"
                     value={formData.hostedStatus || "UnderFive"}
-                    onChange={(e) => setFormData(prevData => ({ ...prevData, eventsHosted: e.target.value }))}
+                    onChange={(e) => setFormData(prevData => ({ ...prevData, hostedStatus: e.target.value }))}
                     className="w-full p-1 rounded-lg bg-zinc-900 border border-gray-500 border-opacity-10 outline-none hover:ring-1 focus:ring-1 ring-gray-900"
                 >
                     <option value="UnderFive">&lt; 5</option>
