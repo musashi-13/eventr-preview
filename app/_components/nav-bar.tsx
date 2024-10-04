@@ -41,7 +41,7 @@ export default function NavBar() {
                 {/* <Link href={'/home'} className="font-gothic text-3xl tracking-widest mr-2">EVENTR</Link> */}
                 {/* Only temporary and eventr logo should redirect to /home as shown above*/}
                 {/* {pathname === "/" || pathname === "/signup" ? */}
-                <Link href="/#team-section" className="hidden font-bold md:block opacity-75 hover:opacity-100 duration-150">Our Team</Link> :
+                <Link href="/#team-section" className="hidden font-bold md:block opacity-75 hover:opacity-100 duration-150">Our Team</Link>
                 {/* <Link href={'/events?cat=all'} className="hidden font-bold md:block opacity-75 hover:opacity-100 duration-150">Categories</Link> */}
                 {/* } */}
                 <p className="hidden md:block opacity-75 font-bold hover:opacity-100 duration-150">About Us</p>
