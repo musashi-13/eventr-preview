@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import ky, { HTTPError, TimeoutError } from 'ky';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleNotch, faEye, faEyeSlash, faWarning } from "@fortawesome/free-solid-svg-icons";
@@ -97,6 +97,12 @@ export default function SignUp() {
         };
     }, [userName]);
 
+    // const hashPassword = async (password: string): Promise<string> => {
+    //     const saltRounds = 10; // Number of salt rounds
+    //     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    //     return hashedPassword;
+    // };
+
     const checkPasswordStrength = (password: string): number => {
         let conditionsMet = 0;
         if (/[A-Z]/.test(password)) conditionsMet++;
@@ -193,6 +199,7 @@ export default function SignUp() {
     
 
     return(
+        <Suspense fallback={<div></div>}>
     <div className="relative flex h-full my-16 items-center justify-center rounded-lg">
         <form onSubmit={handleSignUp} className="-translate-y-8 bg-black border-2 border-zinc-500/20 rounded-lg w-96 h-[480px] p-6 flex flex-col gap-2 justify-center relative">
             <div className="w-full relative text-3xl">
@@ -282,5 +289,6 @@ export default function SignUp() {
             </div> */}
         </form>
     </div>
+    </Suspense>
     )
 }

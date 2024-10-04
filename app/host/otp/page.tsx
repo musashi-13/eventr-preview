@@ -2,7 +2,7 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ky, { HTTPError, TimeoutError } from "ky";
-import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, ClipboardEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent, KeyboardEvent, ClipboardEvent, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { API_ENDPOINTS } from "@/server/endpoints";
 import { useSearchParams } from "next/navigation";
@@ -159,6 +159,7 @@ export default function OtpVerify() {
     };
 
     return (
+        <Suspense fallback={<div></div>}>
         <div className="flex h-screen w-full items-center justify-center">
         <div className= "relative w-96 h-76 p-6 -translate-y-16 flex flex-col justify-center rounded-lg bg-black bg-opacity-50 border-2 border-zinc-500/20 border-opacity-10">
             <div className="w-full relative text-2xl">
@@ -194,5 +195,6 @@ export default function OtpVerify() {
             </div>
         </div>
         </div>
+        </Suspense>
     )
 }
