@@ -5,11 +5,17 @@ import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
+
+import secureLocalStorage from 'react-secure-storage';
+
 config.autoAddCss = false
 
-
 export default function Home() {
+  useEffect(() => {
+    secureLocalStorage.clear()
+  }
+  , [])
   return (
     <main className='relative px-4 md:px-8 lg:px-16 h-full'>
       <div id='hero-section' className='relative flex flex-col justify-center h-60 md:h-72 lg:h-[480px] gap-6 md:gap-8 lg:gap-12'>
