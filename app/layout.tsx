@@ -4,6 +4,8 @@ import NavBar from "./_components/nav-bar";
 import Footer from "./_components/footer";
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import FontAwesome styles
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { Suspense } from "react";
+import Loader from "./_components/loading";
 config.autoAddCss = false; 
 
 export const metadata: Metadata = {
@@ -18,11 +20,13 @@ export default function RootLayout({
 }>) {
   
   return (
-    <html lang="en">
+    <html lang="en" className="bg-black">
       
       <body className="relative bg-black circular-gradient text-white">
         <NavBar/>
+        <Suspense fallback={<div><Loader/></div>}>
         {children}
+        </Suspense>
         <Footer/>
       </body>
     </html>

@@ -34,29 +34,26 @@ export default function OtpVerify() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const params = useSearchParams();
+    const router = useRouter();
     const type = params.get('verify');
     const host = params.get('host');
-    const router = useRouter();
-    useEffect(() => {
-        // Retrieve username from local storage
 
+    useEffect(() => {
         const storedEmail = secureLocalStorage.getItem('email');
         const storedUsername = secureLocalStorage.getItem('username');
 
         if (storedEmail && storedUsername) {
-            if (typeof storedEmail === 'string'){
+            if (typeof storedEmail === 'string') {
                 setEmail(storedEmail);
+            }
             if (typeof storedUsername === 'string') {
                 setUsername(storedUsername);
-            }
-            } else {
-                //raise error later
             }
         }
         secureLocalStorage.removeItem('email');
         secureLocalStorage.removeItem('username');
-
     }, []);
+
     const inputsRef = useRef<HTMLInputElement[]>([]);
 
     //These three are for handling the OTP input, pasting etc.
@@ -122,7 +119,23 @@ export default function OtpVerify() {
             setValues(Array(6).fill(""));
             inputsRef.current[0].focus();
         } catch (error) {
-            setVerifyErrMsg("Failed to resend. Please try again.");
+            if (error instanceof HTTPError) {
+                if (error.response.status === 500) {
+                    setVerifyErrMsg("Server error. Please try again later.");
+                }
+                if (error.response.status === 408) {
+                    setVerifyErrMsg("Registration failed. Please try again.");
+                    router.push('/register');
+                }
+                if (error.response.status === 429) {
+                    setVerifyErrMsg("Too many reattempts. Please try again later.");
+                }
+            } else if (error instanceof TimeoutError) {
+                //if 408 then delete the tokens and push user to signup
+                setVerifyErrMsg("Request timed out. Please try again.");
+            } else {
+                setVerifyErrMsg("An error occurred. Please try again.");
+            }
         }
     }
 
@@ -152,19 +165,15 @@ export default function OtpVerify() {
             }
         } 
         catch (error) {
-            console.log(error)
             if (error instanceof HTTPError) {
                 if (error.response.status === 500) {
-                setVerifyErrMsg("Server error. Please try again later.");
+                    setVerifyErrMsg("Server error. Please try again later.");
                 }
-            const errorData = await error.response.json();
-            switch (errorData.message) {
-                case "OTP_EXPIRED":
-                    setVerifyErrMsg("OTP expired. Please request a new one.");
-                case "OTP_INCORRECT":
-                    setVerifyErrMsg("Incorrect OTP. Please try again.");
-                default:
-                    setVerifyErrMsg("An error occurred. Please try again.");
+                if (error.response.status === 401) {
+                    setVerifyErrMsg("The OTP is invalid. Please try again.");
+                }
+                if (error.response.status === 400) {
+                    setVerifyErrMsg("We could not verify your OTP. Please try again.");
                 }
             } else if (error instanceof TimeoutError) {
                 //if 408 then delete the tokens and push user to signup
@@ -178,7 +187,7 @@ export default function OtpVerify() {
     };
 
     return (
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<div>Loading...</div>}>
         <div className="flex h-screen w-full items-center justify-center">
         <div className= "relative w-96 h-76 p-6 -translate-y-16 flex flex-col justify-center rounded-lg bg-black bg-opacity-50 border-2 border-zinc-500/20 border-opacity-10">
             <div className="w-full relative text-2xl">

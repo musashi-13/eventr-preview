@@ -9,6 +9,7 @@ import Link from "next/link";
 import { API_ENDPOINTS } from "@/server/endpoints";
 import { useSearchParams } from "next/navigation";
 import secureLocalStorage from "react-secure-storage";
+import { hash } from 'bcrypt-ts';
 
 interface SignUpResponse {
     email: string;
@@ -36,12 +37,12 @@ export default function SignUp() {
 
     const router = useRouter();
     const params = useSearchParams();
-    const host = params.get('host');
+    
     const [userName, setUserName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-
+    const host = params.get('host');
     const [isAvailable, setIsAvailable] =  useState<boolean | null>(null);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isPassVisible, setPassVisible] = useState<boolean>(false);
@@ -73,8 +74,19 @@ export default function SignUp() {
             setIsAvailable(response.available)
         }
         catch (error) {
-            setSignUpErrMsg("We are currently facing issues. Please try later.");
-            setIsAvailable(false);
+            if(error instanceof HTTPError){
+                const errorData = await error.response.json();
+                if (error.response.status === 500) {
+                    setInputErrMsg("Server error. Please try again later.");
+                } else if(error.response.status === 409){
+                    setInputErrMsg("Username is already taken.");
+                    setIsAvailable(false);
+                } else {
+                    setInputErrMsg("An unexpected error occurred. Please try again.");
+                }
+            } else {
+                setInputErrMsg("An unexpected error occurred. Please try again.");
+            }
         }
     }
 
@@ -97,11 +109,11 @@ export default function SignUp() {
         };
     }, [userName]);
 
-    // const hashPassword = async (password: string): Promise<string> => {
-    //     const saltRounds = 10; // Number of salt rounds
-    //     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    //     return hashedPassword;
-    // };
+    async function encryptPassword(plainPassword: string): Promise<string> {
+        const saltRounds = 10; // You can adjust the cost factor (salt rounds)
+        const hashedPassword = await hash(plainPassword, saltRounds);
+        return hashedPassword;
+    }
 
     const checkPasswordStrength = (password: string): number => {
         let conditionsMet = 0;
@@ -136,7 +148,7 @@ export default function SignUp() {
             return;
           }
         }
-    
+        const encryptedPass = await encryptPassword(password);
         //Create SigUpDetails onbject
         const userSignUp: SignUpForm = {
             firstName: "",
@@ -144,9 +156,9 @@ export default function SignUp() {
             lastName: "",
             username: userName,
             email: email,
-            password: password,
+            password: encryptedPass
         };
-    
+        console.log(userSignUp);
         setIsSigningUp(true);
 
         try {
@@ -167,31 +179,42 @@ export default function SignUp() {
           router.push("/register/otp?verify=user");
           }
         //API failures
-        } catch (error) {
-            console.log(error)
-          if (error instanceof HTTPError) {
-            if (error.response.status === 500) {
-              setSignUpErrMsg("Server error. Please try again later.");
-            }
+    } catch (error) {
+        console.log(error);
+    
+        if (error instanceof HTTPError) {
             const errorData = await error.response.json();
-            switch (errorData.message) {
-              case "badRequest":
-                setSignUpErrMsg("Bad request. Please check your input.");
-                break;
-              case "emailExists":
-                setSignUpErrMsg("Email already exists. Please try another.");
-                break;
-              case "invalidCreds":
-                setSignUpErrMsg("Unauthorized. Please check your credentials.");
-                break;
-              default:
-                setSignUpErrMsg("An unexpected error occurred. Please try again.");
+            
+            switch (error.response.status) {
+                case 400:
+                    setSignUpErrMsg("Bad request. Please check your input.");
+                    break;
+                case 409:
+                    setSignUpErrMsg(errorData.message === "Username or email have already been taken"
+                        ? "Email or Username already exists."
+                        : "Account registration is already underway. Redirecting to OTP."
+                    );
+
+                    if (errorData.message === "Account registration already underway") {
+                        if (host) {
+                            router.push("/register/otp?verify=user&host=true");
+                        } else {
+                            router.push("/register/otp?verify=user");
+                        }
+                    }
+                    break;
+                case 500:
+                    setSignUpErrMsg("Server error. Please try again later.");
+                    break;
+                default:
+                    setSignUpErrMsg("An unexpected error occurred. Please try again.");
             }
-          } else if (error instanceof TimeoutError) {
+        } else if (error instanceof TimeoutError) {
             setSignUpErrMsg("Request timed out. Please try again.");
-          } else {
+        } else {
             setSignUpErrMsg("An unexpected error occurred. Please try again.");
-          }
+        }
+
         } finally {
           setIsSigningUp(false);
         }
@@ -199,7 +222,7 @@ export default function SignUp() {
     
 
     return(
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<div>Loading...</div>}>
     <div className="relative flex h-full my-16 items-center justify-center rounded-lg">
         <form onSubmit={handleSignUp} className="-translate-y-8 bg-black border-2 border-zinc-500/20 rounded-lg w-96 h-[480px] p-6 flex flex-col gap-2 justify-center relative">
             <div className="w-full relative text-3xl">
