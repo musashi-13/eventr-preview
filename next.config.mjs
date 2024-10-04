@@ -18,6 +18,7 @@ const nextConfig = {
       },
       env: {
         API_SERVER: process.env.API_SERVER,
+        API_LOCAL: process.env.API_LOCAL,
       }
 };
 

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { API_ENDPOINTS } from "@/server/endpoints";
 import { useSearchParams } from "next/navigation";
 import secureLocalStorage from "react-secure-storage";
-import { hash } from 'bcrypt-ts';
+import { createHash } from "crypto";
 
 interface SignUpResponse {
     email: string;
@@ -19,9 +19,6 @@ interface SignUpResponse {
     username: string;
 }
 interface SignUpForm{
-    firstName: string;
-    middleName?: string;
-    lastName: string;
     email: string;
     username: string;
     password: string;
@@ -109,12 +106,6 @@ export default function SignUp() {
         };
     }, [userName]);
 
-    async function encryptPassword(plainPassword: string): Promise<string> {
-        const saltRounds = 10; // You can adjust the cost factor (salt rounds)
-        const hashedPassword = await hash(plainPassword, saltRounds);
-        return hashedPassword;
-    }
-
     const checkPasswordStrength = (password: string): number => {
         let conditionsMet = 0;
         if (/[A-Z]/.test(password)) conditionsMet++;
@@ -148,17 +139,13 @@ export default function SignUp() {
             return;
           }
         }
-        const encryptedPass = await encryptPassword(password);
+        const encryptedPass = createHash("sha256").update(password).digest("hex");
         //Create SigUpDetails onbject
         const userSignUp: SignUpForm = {
-            firstName: "",
-            middleName: "",
-            lastName: "",
             username: userName,
             email: email,
             password: encryptedPass
         };
-        console.log(userSignUp);
         setIsSigningUp(true);
 
         try {
@@ -168,7 +155,6 @@ export default function SignUp() {
             },
             json: userSignUp
         }).json<SignUpResponse>();
-          console.log(response)
           // Code after signup successful
           secureLocalStorage.setItem('accessKey', response.tempToken);          
           secureLocalStorage.setItem('email', response.email);
@@ -180,7 +166,6 @@ export default function SignUp() {
           }
         //API failures
     } catch (error) {
-        console.log(error);
     
         if (error instanceof HTTPError) {
             const errorData = await error.response.json();

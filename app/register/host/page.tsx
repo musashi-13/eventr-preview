@@ -178,7 +178,6 @@ export default function SignUp() {
         }
 
         setIsSigningUp(true);
-        console.log(updatedFormData);
 
         try {
           const response = await ky.post(API_ENDPOINTS.HOST_SIGNUP,
